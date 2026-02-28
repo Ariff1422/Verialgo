@@ -80,8 +80,8 @@ No MicroBlaze. No Nios II. Just hardware.
 
 | Category | Details |
 |---|---|
-| HDL | Verilog |
-| Target Platform | FPGA (Vivado toolchain) |
+| HDL | Verilog (primary), VHDL (PS/2 peripheral) |
+| Target Platform | Basys 3 (Xilinx Artix-7 FPGA) |
 | Memory | Dual-Port Block RAM (BRAM) |
 | Display | OLED via SPI |
 | Input | PS/2 Mouse |
@@ -94,17 +94,47 @@ No MicroBlaze. No Nios II. Just hardware.
 ```
 Verialgo/
 ├── final.srcs/
-│   ├── sources_1/new/       # RTL source files (.v)
-│   │   ├── top.v            # SoC top module
-│   │   ├── sort_engine/     # Merge Sort & Cocktail Sort FSMs
-│   │   ├── anim_buffer/     # Delta Animation Buffer (BRAM)
-│   │   ├── render_engine/   # Pixel-stream graphics pipeline
-│   │   ├── spi_driver/      # OLED SPI driver
-│   │   ├── ps2_controller/  # PS/2 mouse driver
-│   │   └── gui/             # Hardware GUI modules
-│   ├── sim_1/new/           # Testbenches
-│   └── constrs_1/new/       # XDC constraint files
-└── final.xpr                # Vivado project file
+│   ├── sources_1/new/
+│   │   │
+│   │   │── Top_Student_Integrated.v     # SoC top module
+│   │   │
+│   │   │   # Sort Engines
+│   │   ├── merge_sort_engine.v          # Merge Sort FSM
+│   │   ├── cocktail_sort_engine.v       # Cocktail Sort FSM (full)
+│   │   ├── cocktail_sort_simple.v       # Cocktail Sort (simplified)
+│   │   ├── random_sort_simple.v         # Random shuffle engine
+│   │   │
+│   │   │   # Animation & Memory
+│   │   ├── history_buffer.v             # Delta Animation Buffer (circular BRAM)
+│   │   ├── dual_port_ram.v              # Dual-Port BRAM primitive
+│   │   │
+│   │   │   # Graphics Pipeline
+│   │   ├── Oled_Display.v               # OLED SPI display driver
+│   │   ├── Oled_Display.vh              # Display header/parameters
+│   │   ├── text_renderer.v              # Bitmap font text rendering
+│   │   ├── font_rom.v                   # Font ROM (bitmap glyphs)
+│   │   ├── mouse_cursor_gfx.v           # Hardware mouse cursor sprite
+│   │   ├── playback_indicator_gfx.v     # Playback status UI element
+│   │   ├── eight_bar_celebration.v      # Sort completion animation
+│   │   │
+│   │   │   # GUI Screens
+│   │   ├── verialgo_splash_gfx.v        # Splash / boot screen
+│   │   ├── prescreen_gfx.v              # Pre-sort setup screen
+│   │   ├── selection_screen_gfx.v       # Algorithm selection screen
+│   │   ├── algo_selection_gfx.v         # Algorithm picker UI
+│   │   ├── array_entry_gfx.v            # Manual array input screen
+│   │   ├── create_setup_gfx.v           # Configuration screen
+│   │   │
+│   │   │   # Peripheral Drivers & Utilities
+│   │   ├── Ps2Interface.vhd             # PS/2 mouse interface (VHDL)
+│   │   ├── Mouse_Control.vhd            # PS/2 mouse controller (VHDL)
+│   │   ├── debouncer.v                  # Input debouncer
+│   │   ├── clock_divider.v              # Clock divider for speed control
+│   │   └── lfsr.v                       # LFSR pseudo-random number generator
+│   │
+│   ├── sim_1/new/                       # Testbenches
+│   └── constrs_1/new/                   # XDC constraint files
+└── final.xpr                            # Vivado project file
 ```
 
 ---
